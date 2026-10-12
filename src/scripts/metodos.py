@@ -5,9 +5,7 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
 
     fa = f(a)
     fb = f(b)
- 
     errores = []
-
     historial = []
 
     # Verificamos si un extremo ya es una raiz
@@ -42,11 +40,8 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
     for i in range(1, max_iter + 1):
 
         xm = (a + b) / 2
-
         fxm = f(xm)
-
         error = abs(fxm)
-
         errores.append(error)
         historial.append(xm)
 
@@ -121,11 +116,8 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
 
         # Aplicamos la formula de falsa posicion
         xr = (a * fb - b * fa) / (fb - fa)
-
         fxr = f(xr)
-
         error = abs(fxr)
-
         errores.append(error)
         historial.append(xr)
 
@@ -157,7 +149,6 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
         "historial": historial,
         "convergencia": False
     }
-
 
 
 # Metodo de la secante
@@ -192,9 +183,7 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
             }
 
         x2 = x1 - fx1 * (x1 - x0) / denominador
-
         error = abs(f(x2))
-
         historial.append(x2)
         errores.append(error)
 
@@ -219,85 +208,3 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
         "convergencia": False
     }
 
-
-
-if __name__ == "__main__":
-
-    from funciones import funcion_polinomica
-    
-    from funciones import funcion_raiz_doble
-
-    # Ejecutamos biseccion
-    resultado = biseccion(
-        funcion_polinomica,
-        1,
-        2,
-        1e-6,
-        100
-    )
-
-    print("METODO DE BISECCION")
-    print("Raiz aproximada:", resultado["raiz"])
-    print("Iteraciones:", resultado["iteraciones"])
-    print("Convergencia:", resultado["convergencia"])
-
-    print("\nHISTORIAL DE ITERACIONES")
-
-    for i in range(len(resultado["historial"])):
-        print(
-            "Iteracion:", i + 1,
-            "Raiz:", resultado["historial"][i],
-            "Error:", resultado["errores"][i]
-        )
-
-
-    # Prueba del metodo de falsa posicion
-    print("\nMETODO DE FALSA POSICION")
-
-    resultado = falsa_posicion(
-        funcion_polinomica,
-        1,
-        2,
-        1e-6,
-        100
-    )
-
-    print("Raiz aproximada:", resultado["raiz"])
-    print("Iteraciones:", resultado["iteraciones"])
-    print("Convergencia:", resultado["convergencia"])
-
-    # Mostramos las aproximaciones.
-    print("\nHISTORIAL DE ITERACIONES")
-
-    for i in range(len(resultado["historial"])):
-        print(
-            "Iteracion:", i + 1,
-            "Raiz:", resultado["historial"][i],
-            "Error:", resultado["errores"][i]
-        )
-
-
-    # Ejecutamos el metodo de la secante
-    resultado = secante(
-        funcion_polinomica,
-        1,
-        2,
-        1e-6,
-        100
-    )
-
-    print("METODO DE LA SECANTE")
-    print("Raiz:", resultado["raiz"])
-    print("Iteraciones:", resultado["iteraciones"])
-    print("Convergencia:", resultado["convergencia"])
-
-    print("\nHISTORIAL DE ITERACIONES")
-
-    for i in range(len(resultado["historial"])):
-        print(
-            "Iteracion:", i + 1,
-            "Raiz:", resultado["historial"][i],
-            "Error:", resultado["errores"][i]
-        )
-        
-        

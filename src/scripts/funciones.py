@@ -13,15 +13,12 @@ def funcion_raiz_doble(x):
     return resultado
 
 
-
 # Funcion logaritmica f(x) = ln(x) + x - 4
 def funcion_logaritmica(x):
 
     if x <= 0:
         raise ValueError("El valor de x debe ser mayor que 0.")
-
     resultado = np.log(x) + x - 4
-
     return resultado
 
 
@@ -58,13 +55,12 @@ if __name__ == "__main__":
 
     if funcion_raiz_doble(x2) == 0:
         print("La funcion tiene una raiz en x = 2")
-
     if funcion_raiz_doble(x1) * funcion_raiz_doble(x3) < 0:
         print("Existe cambio de signo.")
     else:
         print("No existe cambio de signo.")
 
-    
+  
     # Prueba de la funcion logaritmica.
     print("\nFuncion: f(x) = ln(x) + x - 4")
 

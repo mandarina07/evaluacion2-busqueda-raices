@@ -1,0 +1,4 @@
+Funcion,Metodo,Raiz,Iteraciones,Error,Convergencia
+Polinomica,Biseccion,1.5213797092437744,22,1.4498129807805071e-08,True
+Polinomica,Falsa posicion,1.521379636045493,13,4.2057696059139005e-07,True
+Polinomica,Secante,1.5213797079848717,6,7.015477976324291e-09,True
