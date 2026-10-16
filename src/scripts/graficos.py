@@ -89,16 +89,17 @@ if __name__ == "__main__":
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
     resultado_exponencial = biseccion(funcion_exponencial, 0, 1, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion("exponencial", "e^(-x) - x",funcion_exponencial, -1, 2, resultado_exponencial["raiz"])
+    graficar_funcion("exponencial", "e^(-x) - x",funcion_exponencial, 0, 1, resultado_exponencial["raiz"])
 
 
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
     resultado_trigonometrica = biseccion(funcion_trigonometrica, 0, 1, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion("trigonometrica", "cos(x) - x", funcion_trigonometrica, -1, 2, resultado_trigonometrica["raiz"])
+    graficar_funcion("trigonometrica", "cos(x) - x", funcion_trigonometrica, 0, 1, resultado_trigonometrica["raiz"])
 
 
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
     resultado_mixta = biseccion(funcion_mixta, 0.1, 1, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion("mixta", "√x - cos(x)", funcion_mixta, -1, 2, resultado_mixta["raiz"])
+    graficar_funcion("mixta", "√x - cos(x)", funcion_mixta, 0, 1, resultado_mixta["raiz"])
+
