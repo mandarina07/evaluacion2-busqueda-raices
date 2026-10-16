@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Funcion para graficar una funcion matematica
-def graficar_funcion(nombre, funcion, a, b, raiz):
+def graficar_funcion(nombre, fx, funcion, a, b, raiz):
 
     carpeta_scripts = Path(__file__).resolve().parent
     carpeta_src = carpeta_scripts.parent
@@ -39,7 +39,7 @@ def graficar_funcion(nombre, funcion, a, b, raiz):
     plt.title("Grafico de " + nombre)
     # Etiquetamos los ejes
     plt.xlabel("x")
-    plt.ylabel("f(x)")
+    plt.ylabel(f"f(x) = {fx}")
     # Mostramos la leyenda
     plt.legend()
     # Agregamos una cuadricula
@@ -65,50 +65,40 @@ if __name__ == "__main__":
     from funciones import funcion_polinomica
     from funciones import funcion_raiz_doble
     from funciones import funcion_logaritmica
+    from funciones import funcion_exponencial
+    from funciones import funcion_trigonometrica
+    from funciones import funcion_mixta
     from metodos import biseccion
 
-    # Calculamos la raiz con biseccion
-    resultado_polinomica = biseccion(
-        funcion_polinomica,
-        1,
-        2,
-        1e-6,
-        100
-    )
-
+    # Calculamos la raiz con biseccion -------------------------------------------------------------------
+    resultado_polinomica = biseccion(funcion_polinomica, 1, 2, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion(
-        "polinomica",
-        funcion_polinomica,
-        1,
-        2,
-        resultado_polinomica["raiz"]
-    )
+    graficar_funcion("polinomica", "x^3 - x - 2", funcion_polinomica, 1, 2, resultado_polinomica["raiz"])
 
-    # Utilizamos la raiz exacta conocida
-    graficar_funcion(
-        "raiz_doble",
-        funcion_raiz_doble,
-        1,
-        3,
-        2
-    )
 
-    # Calculamos la raiz con biseccion
-    resultado_logaritmica = biseccion(
-        funcion_logaritmica,
-        2,
-        3,
-        1e-6,
-        100
-    )
+    # Utilizamos la raiz exacta conocida -------------------------------------------------------------------
+    graficar_funcion("raiz_doble", "(x - 2)^2", funcion_raiz_doble, 1, 3, 2)
 
+
+    # Calculamos la raiz con biseccion -------------------------------------------------------------------
+    resultado_logaritmica = biseccion(funcion_logaritmica, 2, 3, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion(
-        "logaritmica",
-        funcion_logaritmica,
-        2,
-        3,
-        resultado_logaritmica["raiz"]
-    )
-    
+    graficar_funcion("logaritmica", "ln(x) + x - 4", funcion_logaritmica, 2, 3, resultado_logaritmica["raiz"])
+
+
+    # Calculamos la raiz con biseccion -------------------------------------------------------------------
+    resultado_exponencial = biseccion(funcion_exponencial, 0, 1, 1e-6, 100)
+    # Generamos el grafico
+    graficar_funcion("exponencial", "e^(-x) - x",funcion_exponencial, -1, 2, resultado_exponencial["raiz"])
+
+
+    # Calculamos la raiz con biseccion -------------------------------------------------------------------
+    resultado_trigonometrica = biseccion(funcion_trigonometrica, 0, 1, 1e-6, 100)
+    # Generamos el grafico
+    graficar_funcion("trigonometrica", "cos(x) - x", funcion_trigonometrica, -1, 2, resultado_trigonometrica["raiz"])
+
+
+    # Calculamos la raiz con biseccion -------------------------------------------------------------------
+    resultado_mixta = biseccion(funcion_mixta, 0.1, 1, 1e-6, 100)
+    # Generamos el grafico
+    graficar_funcion("mixta", "√x - cos(x)", funcion_mixta, -1, 2, resultado_mixta["raiz"])

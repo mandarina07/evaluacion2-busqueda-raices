@@ -33,7 +33,7 @@ def guardar_resumen(resultados):
             if len(resultado["errores"]) > 0:
                 error = resultado["errores"][-1]
             else:
-              error = ""
+                error = ""
             escritor.writerow([
                 "Polinomica",
                 metodo,
@@ -75,13 +75,13 @@ def guardar_datos_funcion(nombre, funcion, a, b, cantidad=200):
 
 # Funcion principal del programa
 def main():
-    
+
     # Definimos el intervalo inicial.
     a = 1
     b = 2
     tolerancia = 1e-6
     max_iteraciones = 100
-    
+
     # Ejecutamos el metodo de biseccion
     resultado_biseccion = biseccion(
         funcion_polinomica,
@@ -166,7 +166,7 @@ def main():
         b,
         200
     )
-    
+
     # Generamos el CSV de la funcion con raiz doble
     guardar_datos_funcion(
         "raiz_doble",
