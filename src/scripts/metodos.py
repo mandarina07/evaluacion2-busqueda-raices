@@ -1,6 +1,7 @@
 import numpy as np
 
 # Metodo de biseccion ---------------------------------------------------------------
+
 def biseccion(f, a, b, tol=1e-6, max_iter=100):
 
     fa = f(a)
@@ -37,11 +38,19 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
             "convergencia": False
         }
 
+    xm_anterior = None
+
     for i in range(1, max_iter + 1):
 
         xm = (a + b) / 2
         fxm = f(xm)
-        error = abs(fxm)
+
+        # Calculamos el error entre aproximaciones
+        if xm_anterior is None:
+            error = (b - a) / 2
+        else:
+            error = abs(xm - xm_anterior)
+
         errores.append(error)
         historial.append(xm)
 
@@ -55,8 +64,7 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
                 "convergencia": True
             }
 
-        # Si hay cambio de signo entre a y xm,
-        # conservamos la mitad izquierda
+        # Actualizamos el intervalo
         if fa * fxm < 0:
             b = xm
             fb = fxm
@@ -64,7 +72,8 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
             a = xm
             fa = fxm
 
-    # Si se alcanza el maximo de iteraciones
+        xm_anterior = xm
+
     return {
         "raiz": xm,
         "iteraciones": max_iter,
@@ -72,6 +81,7 @@ def biseccion(f, a, b, tol=1e-6, max_iter=100):
         "historial": historial,
         "convergencia": False
     }
+
 
 
 # Metodo de falsa posicion ---------------------------------------------------------------------
@@ -102,6 +112,7 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
             "convergencia": True
         }
 
+    # Verificamos que exista un cambio de signo
     if fa * fb > 0:
         return {
             "raiz": None,
@@ -111,13 +122,22 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
             "convergencia": False
         }
 
+    # Guardamos la aproximacion anterior
+    xr_anterior = None
+
     # Iniciamos el proceso iterativo
     for i in range(1, max_iter + 1):
 
         # Aplicamos la formula de falsa posicion
         xr = (a * fb - b * fa) / (fb - fa)
         fxr = f(xr)
-        error = abs(fxr)
+
+        # Calculamos el error entre aproximaciones
+        if xr_anterior is None:
+            error = abs(b - a)
+        else:
+            error = abs(xr - xr_anterior)
+
         errores.append(error)
         historial.append(xr)
 
@@ -131,17 +151,18 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
                 "convergencia": True
             }
 
-        # Si existe cambio de signo en el lado izquierdo,
-        # actualizamos el extremo derecho
+        # Actualizamos el intervalo segun el cambio de signo
         if fa * fxr < 0:
             b = xr
             fb = fxr
-
-        # En caso contrario actualizamos el izquierdo
         else:
             a = xr
             fa = fxr
 
+        # Guardamos la aproximacion actual
+        xr_anterior = xr
+
+    # Si se alcanza el maximo de iteraciones
     return {
         "raiz": xr,
         "iteraciones": max_iter,
@@ -151,9 +172,9 @@ def falsa_posicion(f, a, b, tol=1e-6, max_iter=100):
     }
 
 
+
 # Metodo de la secante ------------------------------------------------------------------------
 def secante(f, x0, x1, tol=1e-6, max_iter=100):
-
     errores = []
     historial = []
 
@@ -162,6 +183,7 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
         fx0 = f(x0)
         fx1 = f(x1)
 
+        # Comprobamos si la aproximacion actual ya es raiz
         if abs(fx1) < tol:
             return {
                 "raiz": x1,
@@ -172,6 +194,8 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
             }
 
         denominador = fx1 - fx0
+
+        # Evitamos la division por cero
         if denominador == 0:
             return {
                 "raiz": x1,
@@ -181,13 +205,17 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
                 "convergencia": False
             }
 
+        # Aplicamos la formula de la secante
         x2 = x1 - fx1 * (x1 - x0) / denominador
-        error = abs(f(x2))
+
+        # Calculamos el error entre aproximaciones
+        error = abs(x2 - x1)
+
         historial.append(x2)
         errores.append(error)
 
-        # Verificamos el criterio de parada
-        if error < tol:
+        # Comprobamos el criterio de parada
+        if error < tol or f(x2) == 0:
             return {
                 "raiz": x2,
                 "iteraciones": i,
@@ -196,9 +224,11 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
                 "convergencia": True
             }
 
+        # Actualizamos las aproximaciones
         x0 = x1
         x1 = x2
 
+    # Si se alcanza el maximo de iteraciones
     return {
         "raiz": x2,
         "iteraciones": max_iter,
@@ -206,6 +236,7 @@ def secante(f, x0, x1, tol=1e-6, max_iter=100):
         "historial": historial,
         "convergencia": False
     }
+
 
 
 # Metodo punto fijo ---------------------------------------------------------------------

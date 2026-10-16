@@ -1,4 +1,37 @@
-Funcion,Metodo,Raiz,Iteraciones,Error,Convergencia
-Polinomica,Biseccion,1.5213797092437744,22,1.4498129807805071e-08,True
-Polinomica,Falsa posicion,1.521379636045493,13,4.2057696059139005e-07,True
-Polinomica,Secante,1.5213797079848717,6,7.015477976324291e-09,True
+funcion,metodo,iteraciones,raiz,error,convergencia
+Polinomica,Biseccion,20,1.5213804244995117,9.5367431640625e-07,True
+Polinomica,Falsa posicion,12,1.5213794617901568,6.033862631760201e-07,True
+Polinomica,Punto fijo,8,1.521379791014052,5.00523409385778e-07,True
+Polinomica,Secante,6,1.5213797079848717,3.391315127831973e-06,True
+Polinomica,Newton-Raphson,4,1.521379709733148,6.175540198860574e-05,True
+Polinomica,Newton-Raphson mejorado,4,1.5213796944745157,0.00012669932188469346,True
+Raiz doble,Biseccion,0,2.0,,True
+Raiz doble,Falsa posicion,0,2.0,,True
+Raiz doble,Punto fijo,2,2.0,0.0,True
+Raiz doble,Secante,0,2.0,,True
+Raiz doble,Newton-Raphson,10,1.99921875,0.0007812499999999556,True
+Raiz doble,Newton-Raphson mejorado,1,2.0,0.8,True
+Logaritmica,Biseccion,20,2.9262704849243164,9.5367431640625e-07,True
+Logaritmica,Falsa posicion,5,2.9262710829961525,3.988260344200967e-07,True
+Logaritmica,Punto fijo,100,1.0604803997042797e-22,54.598150033144236,False
+Logaritmica,Secante,3,2.9262710641925755,1.1281492793724368e-05,True
+Logaritmica,Newton-Raphson,2,2.9262710394063953,0.000727452066196399,True
+Logaritmica,Newton-Raphson mejorado,2,2.9262710883316667,0.0007715011160751573,True
+Exponencial,Biseccion,20,0.567143440246582,9.5367431640625e-07,True
+Exponencial,Falsa posicion,7,0.5671433760339215,6.843411810564248e-07,True
+Exponencial,Punto fijo,26,0.5671430308342419,7.172651695919185e-07,True
+Exponencial,Secante,4,0.5671433066049633,2.7051814781353656e-05,True
+Exponencial,Newton-Raphson,3,0.5671431650348622,0.0008321618376440076,True
+Exponencial,Newton-Raphson mejorado,3,0.5671437679081484,0.0016252654686111923,True
+Trigonometrica,Biseccion,20,0.7390851974487305,9.5367431640625e-07,True
+Trigonometrica,Falsa posicion,6,0.7390851156443783,3.33195455226587e-07,True
+Trigonometrica,Punto fijo,34,0.7390855263619245,9.767867118481988e-07,True
+Trigonometrica,Secante,4,0.7390851121274639,3.4249784165441e-05,True
+Trigonometrica,Newton-Raphson,3,0.739085133385284,2.7757526077643035e-05,True
+Trigonometrica,Newton-Raphson mejorado,3,0.7390851331587,1.599046076217192e-05,True
+Mixta,Biseccion,20,0.641714382171631,8.583068847878295e-07,True
+Mixta,Falsa posicion,5,0.6417143458786837,5.067038233441679e-07,True
+Mixta,Punto fijo,100,0.6399108034541754,0.0036832158904362977,False
+Mixta,Secante,3,0.6417145290502199,0.0002407729213236287,True
+Mixta,Newton-Raphson,2,0.641714866792004,0.001960765013701349,True
+Mixta,Newton-Raphson mejorado,2,0.6417142562525041,0.0009444906811537646,True
