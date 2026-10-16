@@ -137,6 +137,19 @@ if __name__ == "__main__":
     from funciones import derivada_trigonometrica
     from funciones import derivada_mixta
 
+    from funciones import segunda_derivada_polinomica
+    from funciones import g_polinomica
+    from funciones import segunda_derivada_raiz_doble
+    from funciones import g_raiz_doble
+    from funciones import segunda_derivada_logaritmica
+    from funciones import g_logaritmica
+    from funciones import segunda_derivada_exponencial
+    from funciones import g_exponencial
+    from funciones import segunda_derivada_trigonometrica
+    from funciones import g_trigonometrica
+    from funciones import segunda_derivada_mixta
+    from funciones import g_mixta
+
     from metodos import biseccion
     from metodos import falsa_posicion
     from metodos import punto_fijo
@@ -171,62 +184,62 @@ if __name__ == "__main__":
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
     resultado_mixta = biseccion(fun_mixta, 0.1, 1, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion("mixta", "√x - cos(x)", fun_mixta, 0, 1, resultado_mixta["raiz"])
+    graficar_funcion("mixta", "√x - cos(x)", fun_mixta, 0.1, 1, resultado_mixta["raiz"])
 
 
     resultados_por_funcion = {
         "Polinomica": {
             "Biseccion": biseccion(fun_polinomica, 1, 2),
             "Falsa posicion": falsa_posicion(fun_polinomica, 1, 2),
-            "Punto fijo": punto_fijo("", 2),
+            "Punto fijo": punto_fijo(g_polinomica, 2),
             "Secante": secante(fun_polinomica, 1, 2),
             "Newton-Raphson": newton_raphson(fun_polinomica, derivada_polinomica, 2),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_polinomica, derivada_polinomica, "", 2)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_polinomica, derivada_polinomica, segunda_derivada_polinomica, 2)
         },
 
         "Raiz doble": {
             "Biseccion": biseccion(fun_raiz_doble, 1, 2),
             "Falsa posicion": falsa_posicion(fun_raiz_doble, 1, 2),
-            "Punto fijo": punto_fijo("", 1.2),
+            "Punto fijo": punto_fijo(g_raiz_doble, 1.2),
             "Secante": secante(fun_raiz_doble, 1, 2),
             "Newton-Raphson": newton_raphson(fun_raiz_doble, derivada_raiz_doble, 1.2),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_raiz_doble, derivada_raiz_doble, "", 1.2)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_raiz_doble, derivada_raiz_doble, segunda_derivada_raiz_doble, 1.2)
         },
 
         "Logaritmica": {
             "Biseccion": biseccion(fun_logaritmica, 2, 3),
             "Falsa posicion": falsa_posicion(fun_logaritmica, 2, 3),
-            "Punto fijo": punto_fijo("", 3),
+            "Punto fijo": punto_fijo(g_logaritmica, 3),
             "Secante": secante(fun_logaritmica, 2, 3),
             "Newton-Raphson": newton_raphson(fun_logaritmica, derivada_logaritmica, 3),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, "", 3)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, segunda_derivada_logaritmica, 3)
         },
 
         "Exponencial": {
             "Biseccion": biseccion(fun_exponencial, 0, 1),
             "Falsa posicion": falsa_posicion(fun_exponencial,  0, 1),
-            "Punto fijo": punto_fijo("", 0),
+            "Punto fijo": punto_fijo(g_exponencial, 0),
             "Secante": secante(fun_exponencial,  0, 1),
             "Newton-Raphson": newton_raphson(fun_exponencial, derivada_exponencial, 0),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_exponencial, derivada_exponencial, "", 0)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_exponencial, derivada_exponencial, segunda_derivada_exponencial, 0)
         },
 
         "Trigonometrica": {
             "Biseccion": biseccion(fun_trigonometrica, 0, 1),
             "Falsa posicion": falsa_posicion(fun_trigonometrica,  0, 1),
-            "Punto fijo": punto_fijo("", 1),
+            "Punto fijo": punto_fijo(g_trigonometrica, 1),
             "Secante": secante(fun_trigonometrica,  0, 1),
             "Newton-Raphson": newton_raphson(fun_trigonometrica, derivada_trigonometrica, 1),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_trigonometrica, derivada_trigonometrica, "", 1)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_trigonometrica, derivada_trigonometrica, segunda_derivada_trigonometrica, 1)
         },
 
         "Mixta": {
             "Biseccion": biseccion(fun_mixta, 0.1, 1),
             "Falsa posicion": falsa_posicion(fun_mixta,  0.1, 1),
-            "Punto fijo": punto_fijo("", 0.5),
+            "Punto fijo": punto_fijo(g_mixta, 0.5),
             "Secante": secante(fun_mixta,  0.1, 1),
             "Newton-Raphson": newton_raphson(fun_mixta, derivada_mixta, 0.5),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_mixta, derivada_mixta, "", 0.5)
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_mixta, derivada_mixta, segunda_derivada_mixta, 0.5)
         }
     }
 

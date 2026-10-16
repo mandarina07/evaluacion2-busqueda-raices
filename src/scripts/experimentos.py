@@ -184,7 +184,7 @@ def main():
         3,
         200
     )
-    
+
     # Generamos el CSV de la funcion exponencial.
     guardar_datos_funcion(
         "exponencial",
