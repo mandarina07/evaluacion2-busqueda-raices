@@ -171,7 +171,7 @@ if __name__ == "__main__":
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
     resultado_mixta = biseccion(fun_mixta, 0.1, 1, 1e-6, 100)
     # Generamos el grafico
-    graficar_funcion("mixta", "√x - cos(x)", fun_mixta, 0, 1, resultado_mixta["raiz"])
+    graficar_funcion("mixta", "√x - cos(x)", fun_mixta, 0.1, 1, resultado_mixta["raiz"])
 
 
     resultados_por_funcion = {
