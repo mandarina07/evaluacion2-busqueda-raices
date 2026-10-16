@@ -56,7 +56,7 @@ def graficar_funcion(nombre, fx, funcion, a, b, raiz):
     # Mostramos un mensaje
     print("Grafico guardado en:", ruta_grafico)
 
-def graficar_convergencia(nombre_funcion, resultados):
+def graficar_convergencia(nombre_funcion, resultados, funcion):
     # Definimos las carpetas de guardado
     carpeta_scripts = Path(__file__).resolve().parent
     carpeta_src = carpeta_scripts.parent
@@ -69,8 +69,11 @@ def graficar_convergencia(nombre_funcion, resultados):
     hay_datos = False
 
     for nombre_metodo, resultado in resultados.items():
-        errores = np.array(resultado["errores"], dtype=float)
-
+        # Calculamos el mismo tipo de error para todos los metodos
+        errores = np.array(
+            [abs(funcion(x)) for x in resultado["historial"]],
+            dtype=float
+)
         iteraciones = np.arange(1, len(errores) + 1)
 
         # La escala logaritmica requiere errores positivos
@@ -91,7 +94,7 @@ def graficar_convergencia(nombre_funcion, resultados):
     # Configuramos la grafica
     plt.yscale("log")
     plt.xlabel("Iteracion")
-    plt.ylabel("Error absoluto")
+    plt.ylabel("Error residual |f(x)|")
     plt.title(f"Convergencia - {nombre_funcion}")
     plt.grid(True, which="both", linestyle="--", alpha=0.5)
 
@@ -117,47 +120,6 @@ def graficar_convergencia(nombre_funcion, resultados):
 
     print("Grafico guardado en:", ruta_grafico)
 
-def guardar_resumen_convergencia(resultados_por_funcion):
-    filas = []
-
-    # Recorremos cada funcion
-    for nombre_funcion, resultados in resultados_por_funcion.items():
-
-        # Recorremos cada metodo aplicado a esa funcion
-        for nombre_metodo, resultado in resultados.items():
-
-            errores = resultado["errores"]
-
-            # Obtener el ultimo error registrado
-            if errores:
-                error_final = errores[-1]
-            else:
-                error_final = None
-
-            # Guardar los datos de la ejecucion
-            filas.append({
-                "funcion": nombre_funcion,
-                "metodo": nombre_metodo,
-                "iteraciones": resultado["iteraciones"],
-                "raiz": resultado["raiz"],
-                "error": error_final,
-                "convergencia": resultado["convergencia"]
-            })
-
-    # Convertir los datos en una tabla
-    df = pd.DataFrame(filas)
-
-    # Definir la carpeta assets
-    carpeta_scripts = Path(__file__).resolve().parent
-    carpeta_src = carpeta_scripts.parent
-    carpeta_assets = carpeta_src / "data"
-    carpeta_assets.mkdir(parents=True, exist_ok=True)
-
-    # Guardar el CSV
-    ruta_csv = carpeta_assets / "resumen_convergencia.csv"
-    df.to_csv(ruta_csv, index=False)
-
-    print("Resumen guardado en:", ruta_csv)
 
 def graficar_iteraciones(resultados_por_funcion):
     # Definir las carpetas de guardado
@@ -268,6 +230,8 @@ if __name__ == "__main__":
     from metodos import secante
     from metodos import newton_raphson
     from metodos import newton_raphson_mejorado
+    
+    from experimentos import funciones
 
 
     # Calculamos la raiz con biseccion -------------------------------------------------------------------
@@ -301,64 +265,63 @@ if __name__ == "__main__":
 
     resultados_por_funcion = {
         "Polinomica": {
-            "Biseccion": biseccion(fun_polinomica, 1, 2),
-            "Falsa posicion": falsa_posicion(fun_polinomica, 1, 2),
-            "Punto fijo": punto_fijo(g_polinomica, 2),
-            "Secante": secante(fun_polinomica, 1, 2),
-            "Newton-Raphson": newton_raphson(fun_polinomica, derivada_polinomica, 2),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_polinomica, derivada_polinomica, segunda_derivada_polinomica, 2)
+            "Biseccion": biseccion(fun_polinomica, 1, 2, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_polinomica, 1, 2, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_polinomica, 1.5, 1e-6, 100),
+            "Secante": secante(fun_polinomica, 1.5, 2, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_polinomica, derivada_polinomica, 1.5, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_polinomica, derivada_polinomica, segunda_derivada_polinomica, 1.5, 1e-6, 100)
         },
 
         "Raiz doble": {
-            "Biseccion": biseccion(fun_raiz_doble, 1, 2),
-            "Falsa posicion": falsa_posicion(fun_raiz_doble, 1, 2),
-            "Punto fijo": punto_fijo(g_raiz_doble, 1.2),
-            "Secante": secante(fun_raiz_doble, 1, 2),
-            "Newton-Raphson": newton_raphson(fun_raiz_doble, derivada_raiz_doble, 1.2),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_raiz_doble, derivada_raiz_doble, segunda_derivada_raiz_doble, 1.2)
+            "Biseccion": biseccion(fun_raiz_doble, 1, 3, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_raiz_doble, 1, 3, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_raiz_doble, 1.2, 1e-6, 100),
+            "Secante": secante(fun_raiz_doble, 1.2, 3, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_raiz_doble, derivada_raiz_doble, 1.2, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_raiz_doble, derivada_raiz_doble, segunda_derivada_raiz_doble, 1.2, 1e-6, 100)
         },
-
+        
         "Logaritmica": {
-            "Biseccion": biseccion(fun_logaritmica, 2, 3),
-            "Falsa posicion": falsa_posicion(fun_logaritmica, 2, 3),
-            "Punto fijo": punto_fijo(g_logaritmica, 2.8),
-            "Secante": secante(fun_logaritmica, 2, 3),
-            "Newton-Raphson": newton_raphson(fun_logaritmica, derivada_logaritmica, 2.8),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, segunda_derivada_logaritmica, 2.8)
+            "Biseccion": biseccion(fun_logaritmica, 2, 3, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_logaritmica, 2, 3, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_logaritmica, 2.5, 1e-6, 100),
+            "Secante": secante(fun_logaritmica, 2.5, 3, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_logaritmica, derivada_logaritmica, 2.5, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, segunda_derivada_logaritmica, 2.5, 1e-6, 100)
         },
-
+        
         "Exponencial": {
-            "Biseccion": biseccion(fun_exponencial, 0, 1),
-            "Falsa posicion": falsa_posicion(fun_exponencial,  0, 1),
-            "Punto fijo": punto_fijo(g_exponencial, 0),
-            "Secante": secante(fun_exponencial,  0, 1),
-            "Newton-Raphson": newton_raphson(fun_exponencial, derivada_exponencial, 0),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_exponencial, derivada_exponencial, segunda_derivada_exponencial, 0)
+            "Biseccion": biseccion(fun_exponencial, 0, 1, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_exponencial, 0, 1, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_exponencial, 0.5, 1e-6, 100),
+            "Secante": secante(fun_exponencial, 0.5, 1, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_exponencial, derivada_exponencial, 0.5, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_exponencial, derivada_exponencial, segunda_derivada_exponencial, 0.5, 1e-6, 100)
         },
 
         "Trigonometrica": {
-            "Biseccion": biseccion(fun_trigonometrica, 0, 1),
-            "Falsa posicion": falsa_posicion(fun_trigonometrica,  0, 1),
-            "Punto fijo": punto_fijo(g_trigonometrica, 1),
-            "Secante": secante(fun_trigonometrica,  0, 1),
-            "Newton-Raphson": newton_raphson(fun_trigonometrica, derivada_trigonometrica, 1),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_trigonometrica, derivada_trigonometrica, segunda_derivada_trigonometrica, 1)
+            "Biseccion": biseccion(fun_trigonometrica, 0, 1, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_trigonometrica, 0, 1, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_trigonometrica, 0.5, 1e-6, 100),
+            "Secante": secante(fun_trigonometrica, 0.5, 1, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_trigonometrica, derivada_trigonometrica, 0.5, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_trigonometrica, derivada_trigonometrica, segunda_derivada_trigonometrica, 0.5, 1e-6, 100)
         },
 
         "Mixta": {
-            "Biseccion": biseccion(fun_mixta, 0.1, 1),
-            "Falsa posicion": falsa_posicion(fun_mixta,  0.1, 1),
-            "Punto fijo": punto_fijo(g_mixta, 0.5),
-            "Secante": secante(fun_mixta,  0.1, 1),
-            "Newton-Raphson": newton_raphson(fun_mixta, derivada_mixta, 0.5),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_mixta, derivada_mixta, segunda_derivada_mixta, 0.5)
-        }
+            "Biseccion": biseccion(fun_mixta, 0.1, 1, 1e-6, 100),
+            "Falsa posicion": falsa_posicion(fun_mixta, 0.1, 1, 1e-6, 100),
+            "Punto fijo": punto_fijo(g_mixta, 0.5, 1e-6, 100),
+            "Secante": secante(fun_mixta, 0.5, 1, 1e-6, 100),
+            "Newton-Raphson": newton_raphson(fun_mixta, derivada_mixta, 0.5, 1e-6, 100),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_mixta, derivada_mixta, segunda_derivada_mixta, 0.5, 1e-6, 100)
+        }    
     }
 
     for nombre, resultados in resultados_por_funcion.items():
         if resultados:
-            graficar_convergencia(nombre, resultados)
+            graficar_convergencia(nombre, resultados, funciones[nombre]["funcion"]
+            )
 
-guardar_resumen_convergencia(resultados_por_funcion)
-
-graficar_iteraciones(resultados_por_funcion)
+    graficar_iteraciones(resultados_por_funcion)
