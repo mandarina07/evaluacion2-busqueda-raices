@@ -74,8 +74,10 @@ def segunda_derivada_logaritmica(x):
     if x <= 0:
         raise ValueError("x debe ser mayor que 0")
     return -1 / x**2
+# Transformacion de punto fijo para la funcion logaritmica.
 def g_logaritmica(x):
-    return np.exp(4 - x)
+    return 4 - np.log(x)
+
 
 # Exponencial
 def segunda_derivada_exponencial(x):
