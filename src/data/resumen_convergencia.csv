@@ -7,7 +7,7 @@ Polinomica,Newton-Raphson,1.5213798059647863,2,5.893874259754739e-07,True
 Polinomica,Newton mejorado,1.5213796094955705,2,5.783840677509033e-07,True
 Raiz doble,Biseccion,,0,,False
 Raiz doble,Falsa posicion,,0,,False
-Raiz doble,Secante,1.9990432910786893,13,9.152919601155266e-07,True
+Raiz doble,Secante,2.0006498781478474,19,4.2234160704963096e-07,True
 Raiz doble,Punto fijo,2,2,0,True
 Raiz doble,Newton-Raphson,1.99921875,10,6.103515624999307e-07,True
 Raiz doble,Newton mejorado,2.0,1,0.0,True
