@@ -184,6 +184,33 @@ def main():
         3,
         200
     )
+    
+    # Generamos el CSV de la funcion exponencial.
+    guardar_datos_funcion(
+        "exponencial",
+        funcion_exponencial,
+        0,
+        1,
+        200
+    )
+
+    # Generamos el CSV de la funcion trigonometrica.
+    guardar_datos_funcion(
+        "trigonometrica",
+        funcion_trigonometrica,
+        0,
+        1,
+        200
+    )
+
+    # Generamos el CSV de la funcion mixta.
+    guardar_datos_funcion(
+        "mixta",
+        funcion_mixta,
+        0.1,
+        1,
+        200
+    )
 
     print("\nExperimento finalizado correctamente.")
 
