@@ -6,6 +6,9 @@ from metodos import biseccion, falsa_posicion, secante
 from funciones import funcion_polinomica
 from funciones import funcion_raiz_doble
 from funciones import funcion_logaritmica
+from funciones import funcion_exponencial
+from funciones import funcion_trigonometrica
+from funciones import funcion_mixta
 
 # Funcion para guardar los resultados en un archivo CSV
 def guardar_resumen(resultados):
@@ -182,6 +185,33 @@ def main():
         funcion_logaritmica,
         2,
         3,
+        200
+    )
+    
+    # Generamos el CSV de la funcion exponencial.
+    guardar_datos_funcion(
+        "exponencial",
+        funcion_exponencial,
+        0,
+        1,
+        200
+    )
+
+    # Generamos el CSV de la funcion trigonometrica.
+    guardar_datos_funcion(
+        "trigonometrica",
+        funcion_trigonometrica,
+        0,
+        1,
+        200
+    )
+
+    # Generamos el CSV de la funcion mixta.
+    guardar_datos_funcion(
+        "mixta",
+        funcion_mixta,
+        0.1,
+        1,
         200
     )
 
