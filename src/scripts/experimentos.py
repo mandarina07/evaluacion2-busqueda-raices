@@ -3,14 +3,11 @@ import numpy as np
 
 from pathlib import Path
 from metodos import biseccion, falsa_posicion, secante
-from funciones import funcion_polinomica
-from funciones import funcion_raiz_doble
-from funciones import funcion_logaritmica
-from funciones import funcion_exponencial
-from funciones import funcion_trigonometrica
-from funciones import funcion_mixta
+from funciones import fun_polinomica
+from funciones import fun_raiz_doble
+from funciones import fun_logaritmica
 
-# Funcion para guardar los resultados en un archivo CSV
+# fun para guardar los resultados en un archivo CSV
 def guardar_resumen(resultados):
 
     carpeta_scripts = Path(__file__).resolve().parent
@@ -52,7 +49,7 @@ def guardar_resumen(resultados):
 
 
 # Funcion para generar un CSV con los puntos de una funcion
-def guardar_datos_funcion(nombre, funcion, a, b, cantidad=200):
+def guardar_datos_fun(nombre, funcion, a, b, cantidad=200):
 
     carpeta_scripts = Path(__file__).resolve().parent
     carpeta_src = carpeta_scripts.parent
@@ -87,7 +84,7 @@ def main():
 
     # Ejecutamos el metodo de biseccion
     resultado_biseccion = biseccion(
-        funcion_polinomica,
+        fun_polinomica,
         a,
         b,
         tolerancia,
@@ -96,7 +93,7 @@ def main():
 
     # Ejecutamos el metodo de falsa posicion
     resultado_falsa = falsa_posicion(
-        funcion_polinomica,
+        fun_polinomica,
         a,
         b,
         tolerancia,
@@ -105,7 +102,7 @@ def main():
 
     # Ejecutamos el metodo de secante
     resultado_secante = secante(
-        funcion_polinomica,
+        fun_polinomica,
         a,
         b,
         tolerancia,
@@ -162,27 +159,27 @@ def main():
     # Guardamos los resultados en un archivo CSV
     guardar_resumen(resultados)
     # Generamos el CSV de la funcion polinomica
-    guardar_datos_funcion(
+    guardar_datos_fun(
         "polinomica",
-        funcion_polinomica,
+        fun_polinomica,
         a,
         b,
         200
     )
 
     # Generamos el CSV de la funcion con raiz doble
-    guardar_datos_funcion(
+    guardar_datos_fun(
         "raiz_doble",
-        funcion_raiz_doble,
+        fun_raiz_doble,
         1,
         3,
         200
     )
 
     # Generamos el CSV de la funcion logaritmica
-    guardar_datos_funcion(
+    guardar_datos_fun(
         "logaritmica",
-        funcion_logaritmica,
+        fun_logaritmica,
         2,
         3,
         200
