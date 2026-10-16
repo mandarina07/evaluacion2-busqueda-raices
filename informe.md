@@ -1,4 +1,4 @@
-### Estudiantes: Felipe Araya Díaz y Mariana Morales
+### Estudiantes: Felipe Araya Díaz y Mariana Morales Muñoz
 # Informe Lab 2: Comparación de métodos de búsqueda de raíces
 
 
