@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pandas as pd
 from pathlib import Path
 
 # Funcion para graficar una funcion matematica
@@ -55,7 +55,6 @@ def graficar_funcion(nombre, fx, funcion, a, b, raiz):
     plt.close()
     # Mostramos un mensaje
     print("Grafico guardado en:", ruta_grafico)
-
 
 def graficar_convergencia(nombre_funcion, resultados):
     # Definimos las carpetas de guardado
@@ -113,6 +112,119 @@ def graficar_convergencia(nombre_funcion, resultados):
     nombre_archivo = f"convergencia_{nombre_funcion}.png"
     ruta_grafico = carpeta_assets / nombre_archivo
 
+    plt.savefig(ruta_grafico, dpi=300)
+    plt.close()
+
+    print("Grafico guardado en:", ruta_grafico)
+
+def guardar_resumen_convergencia(resultados_por_funcion):
+    filas = []
+
+    # Recorremos cada funcion
+    for nombre_funcion, resultados in resultados_por_funcion.items():
+
+        # Recorremos cada metodo aplicado a esa funcion
+        for nombre_metodo, resultado in resultados.items():
+
+            errores = resultado["errores"]
+
+            # Obtener el ultimo error registrado
+            if errores:
+                error_final = errores[-1]
+            else:
+                error_final = None
+
+            # Guardar los datos de la ejecucion
+            filas.append({
+                "funcion": nombre_funcion,
+                "metodo": nombre_metodo,
+                "iteraciones": resultado["iteraciones"],
+                "raiz": resultado["raiz"],
+                "error": error_final,
+                "convergencia": resultado["convergencia"]
+            })
+
+    # Convertir los datos en una tabla
+    df = pd.DataFrame(filas)
+
+    # Definir la carpeta assets
+    carpeta_scripts = Path(__file__).resolve().parent
+    carpeta_src = carpeta_scripts.parent
+    carpeta_assets = carpeta_src / "data"
+    carpeta_assets.mkdir(parents=True, exist_ok=True)
+
+    # Guardar el CSV
+    ruta_csv = carpeta_assets / "resumen_convergencia.csv"
+    df.to_csv(ruta_csv, index=False)
+
+    print("Resumen guardado en:", ruta_csv)
+
+def graficar_iteraciones(resultados_por_funcion):
+    # Definir las carpetas de guardado
+    carpeta_scripts = Path(__file__).resolve().parent
+    carpeta_src = carpeta_scripts.parent
+    carpeta_assets = carpeta_src / "assets"
+    carpeta_assets.mkdir(parents=True, exist_ok=True)
+
+    # Obtener todas las funciones y metodos
+    funciones = list(resultados_por_funcion.keys())
+
+    metodos = []
+    for resultados in resultados_por_funcion.values():
+        for nombre_metodo in resultados.keys():
+            if nombre_metodo not in metodos:
+                metodos.append(nombre_metodo)
+
+    # Configurar las barras
+    x = np.arange(len(funciones))
+    ancho = 0.8 / len(metodos)
+
+    plt.figure(figsize=(14, 7))
+
+    # Dibujar una barra por metodo para cada funcion
+    for i, metodo in enumerate(metodos):
+        valores = []
+
+        for funcion in funciones:
+            resultado = resultados_por_funcion[funcion].get(metodo)
+
+            if resultado is not None and resultado["convergencia"]:
+                valores.append(resultado["iteraciones"])
+            else:
+                valores.append(np.nan)
+
+        desplazamiento = (i - (len(metodos) - 1) / 2) * ancho
+
+        barras = plt.bar(
+            x + desplazamiento,
+            valores,
+            ancho,
+            label=metodo
+        )
+
+        # Mostrar el numero de iteraciones sobre cada barra
+        for barra, valor in zip(barras, valores):
+            if np.isfinite(valor):
+                plt.text(
+                    barra.get_x() + barra.get_width() / 2,
+                    barra.get_height(),
+                    str(int(valor)),
+                    ha="center",
+                    va="bottom",
+                    fontsize=8
+                )
+
+    # Configurar el grafico
+    plt.title("Comparacion de iteraciones por funcion y metodo")
+    plt.xlabel("Funcion")
+    plt.ylabel("Numero de iteraciones")
+    plt.xticks(x, funciones, rotation=20, ha="right")
+    plt.legend(title="Metodo numerico")
+    plt.grid(axis="y", linestyle="--", alpha=0.5)
+    plt.tight_layout()
+
+    # Guardar la imagen
+    ruta_grafico = carpeta_assets / "resumen_iteraciones.png"
     plt.savefig(ruta_grafico, dpi=300)
     plt.close()
 
@@ -209,10 +321,10 @@ if __name__ == "__main__":
         "Logaritmica": {
             "Biseccion": biseccion(fun_logaritmica, 2, 3),
             "Falsa posicion": falsa_posicion(fun_logaritmica, 2, 3),
-            "Punto fijo": punto_fijo(g_logaritmica, 3),
+            "Punto fijo": punto_fijo(g_logaritmica, 2.8),
             "Secante": secante(fun_logaritmica, 2, 3),
-            "Newton-Raphson": newton_raphson(fun_logaritmica, derivada_logaritmica, 3),
-            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, segunda_derivada_logaritmica, 3)
+            "Newton-Raphson": newton_raphson(fun_logaritmica, derivada_logaritmica, 2.8),
+            "Newton-Raphson mejorado": newton_raphson_mejorado(fun_logaritmica, derivada_logaritmica, segunda_derivada_logaritmica, 2.8)
         },
 
         "Exponencial": {
@@ -246,3 +358,7 @@ if __name__ == "__main__":
     for nombre, resultados in resultados_por_funcion.items():
         if resultados:
             graficar_convergencia(nombre, resultados)
+
+guardar_resumen_convergencia(resultados_por_funcion)
+
+graficar_iteraciones(resultados_por_funcion)
