@@ -6,49 +6,78 @@ from metodos import biseccion, falsa_posicion, secante
 from funciones import fun_polinomica
 from funciones import fun_raiz_doble
 from funciones import fun_logaritmica
-from funciones import fun_exponencial
-from funciones import fun_trigonometrica
-from funciones import fun_mixta
 
 # fun para guardar los resultados en un archivo CSV
 def guardar_resumen(resultados):
 
+    # Obtenemos la ubicacion del archivo actual
     carpeta_scripts = Path(__file__).resolve().parent
+
+    # Obtenemos la carpeta src.
     carpeta_src = carpeta_scripts.parent
+
+    # Definimos la carpeta donde guardaremos los CSV
     carpeta_data = carpeta_src / "data"
+
+    # Creamos la carpeta si no existe
     carpeta_data.mkdir(parents=True, exist_ok=True)
+
+    # Definimos la ruta del archivo
     ruta_csv = carpeta_data / "resumen_convergencia.csv"
 
-    # Abrimos el archivo en modo escritura
+    # Abrimos el archivo CSV en modo escritura
     with open(ruta_csv, "w", newline="", encoding="utf-8") as archivo:
+
+        # Creamos el escritor de CSV
         escritor = csv.writer(archivo)
-        # Escribimos los encabezados del archivo
+
+        # Escribimos los encabezados
         escritor.writerow([
             "Funcion",
             "Metodo",
             "Raiz",
             "Iteraciones",
-            "Error",
+            "Error_residual",
             "Convergencia"
         ])
 
-        for metodo, resultado in resultados.items():
-            if len(resultado["errores"]) > 0:
-                error = resultado["errores"][-1]
-            else:
-                error = ""
-            escritor.writerow([
-                "Polinomica",
-                metodo,
-                resultado["raiz"],
-                resultado["iteraciones"],
-                error,
-                resultado["convergencia"]
-            ])
+        # Recorremos las seis funciones
+        for nombre_funcion, resultados in resultados_generales.items():
 
-    print("\nArchivo CSV guardado correctamente:")
+            # Recorremos los metodos de cada funcion
+            for nombre_metodo, resultado in resultados.items():
+
+                # Obtenemos la raiz aproximada
+                raiz = resultado["raiz"]
+
+                # Obtenemos las iteraciones
+                iteraciones = resultado["iteraciones"]
+
+                # Obtenemos el estado de convergencia
+                convergencia = resultado["convergencia"]
+
+                # Obtenemos la funcion original
+                funcion = funciones[nombre_funcion]["funcion"]
+
+                # Calculamos el error residual final
+                if raiz is not None:
+                    error = abs(funcion(raiz))
+                else:
+                    error = ""
+
+                # Escribimos los datos en el CSV
+                escritor.writerow([
+                    nombre_funcion,
+                    nombre_metodo,
+                    raiz if raiz is not None else "",
+                    iteraciones,
+                    error,
+                    convergencia
+                ])
+
+    # Mostramos un mensaje de confirmacion
+    print("\nResumen general guardado correctamente:")
     print(ruta_csv)
-
 
 
 # Funcion para generar un CSV con los puntos de una funcion
@@ -76,88 +105,76 @@ def guardar_datos_fun(nombre, funcion, a, b, cantidad=200):
 
 
 
-# Funcion principal del programa
+# Funcion principal del programa.
 def main():
 
-    # Definimos el intervalo inicial.
-    a = 1
-    b = 2
+    # Definimos las condiciones del laboratorio.
     tolerancia = 1e-6
     max_iteraciones = 100
 
-    # Ejecutamos el metodo de biseccion
-    resultado_biseccion = biseccion(
-        fun_polinomica,
-        a,
-        b,
-        tolerancia,
-        max_iteraciones
-    )
-
-    # Ejecutamos el metodo de falsa posicion
-    resultado_falsa = falsa_posicion(
-        fun_polinomica,
-        a,
-        b,
-        tolerancia,
-        max_iteraciones
-    )
-
-    # Ejecutamos el metodo de secante
-    resultado_secante = secante(
-        fun_polinomica,
-        a,
-        b,
-        tolerancia,
-        max_iteraciones
-    )
-
-    # Guardamos los resultados de los tres metodos
-    resultados = {
-        "Biseccion": resultado_biseccion,
-        "Falsa posicion": resultado_falsa,
-        "Secante": resultado_secante
-    }
-
-    # Mostramos la informacion
     print("==============================================")
     print("     LABORATORIO 2 - BUSQUEDA DE RAICES")
     print("==============================================")
 
-    print("\nFuncion: f(x) = x^3 - x - 2")
-    print("Intervalo inicial:", [a, b])
     print("Tolerancia:", tolerancia)
     print("Maximo de iteraciones:", max_iteraciones)
+    
+    # Diccionario para guardar todos los experimentos.
+    resultados_generales = {}
 
-    print("\nCOMPARACION DE METODOS")
-    print("-" * 75)
+    # Recorremos todas las funciones configuradas.
+    for nombre, datos in funciones.items():
 
-    print(
-        f"{'Metodo':<18}"
-        f"{'Raiz':<18}"
-        f"{'Iteraciones':<18}"
-        f"{'Convergencia':<15}"
-    )
+        # Obtenemos el intervalo.
+        a = datos["a"]
+        b = datos["b"]
 
-    print("-" * 75)
+        # Ejecutamos los tres metodos.
+        resultados = ejecutar_metodos(
+            datos,
+            tolerancia,
+            max_iteraciones
+        )
+        
+        # Guardamos los resultados de esta funcion.
+        resultados_generales[nombre] = resultados
 
-    # Recorremos cada metodo y su resultado
-    for metodo, resultado in resultados.items():
-        raiz = resultado["raiz"]
-        iteraciones = resultado["iteraciones"]
-        convergencia = resultado["convergencia"]
+        # Mostramos el nombre de la funcion.
+        print("\nFUNCION:", nombre)
+        print("Intervalo:", [a, b])
 
-        if raiz is not None:
-            raiz_texto = f"{raiz:.8f}"
-        else:
-            raiz_texto = "No encontrada"
+        # Encabezado de la tabla.
+        print("-" * 70)
 
         print(
-            f"{metodo:<18}"
-            f"{raiz_texto:<18}"
-            f"{iteraciones:<18}"
-            f"{str(convergencia):<15}"
+            f"{'Metodo':<18}"
+            f"{'Raiz':<18}"
+            f"{'Iteraciones':<15}"
+            f"{'Convergencia':<15}"
         )
+
+        print("-" * 70)
+
+        # Recorremos los resultados obtenidos.
+        for metodo, resultado in resultados.items():
+
+            raiz = resultado["raiz"]
+            iteraciones = resultado["iteraciones"]
+            convergencia = resultado["convergencia"]
+
+            # Comprobamos si existe una raiz calculada.
+            if raiz is not None:
+                raiz_texto = f"{raiz:.8f}"
+            else:
+                raiz_texto = "No encontrada"
+
+            # Mostramos la fila correspondiente.
+            print(
+                f"{metodo:<18}"
+                f"{raiz_texto:<18}"
+                f"{iteraciones:<15}"
+                f"{str(convergencia):<15}"
+            )
 
     # Guardamos los resultados en un archivo CSV
     guardar_resumen(resultados)
@@ -187,43 +204,37 @@ def main():
         3,
         200
     )
-<<<<<<< Updated upstream
 
-=======
-    
-    
->>>>>>> Stashed changes
     # Generamos el CSV de la funcion exponencial.
-    guardar_datos_fun(
+    guardar_datos_funcion(
         "exponencial",
-        fun_exponencial,
+        funcion_exponencial,
         0,
         1,
         200
     )
 
     # Generamos el CSV de la funcion trigonometrica.
-    guardar_datos_fun(
+    guardar_datos_funcion(
         "trigonometrica",
-        fun_trigonometrica,
+        funcion_trigonometrica,
         0,
         1,
         200
     )
 
     # Generamos el CSV de la funcion mixta.
-    guardar_datos_fun(
+    guardar_datos_funcion(
         "mixta",
-        fun_mixta,
+        funcion_mixta,
         0.1,
         1,
         200
     )
 
-
     print("\nExperimento finalizado correctamente.")
 
 
-# Ejecutamos el programa principal
+# Ejecutamos el programa.
 if __name__ == "__main__":
     main()
